@@ -26,7 +26,7 @@ on:
 jobs:
   publish-snapshot:
     if: github.repository == 'apache/flink-kubernetes-operator'
-    runs-on: ubuntu-latest
+    runs-on: magnon-enterprise-runners
     steps:
       - uses: actions/checkout@v4
         with:

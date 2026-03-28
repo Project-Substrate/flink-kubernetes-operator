@@ -34,7 +34,7 @@ on:
 jobs:
   e2e_test:
     name: ${{ inputs.test }}
-    runs-on: ubuntu-latest
+    runs-on: magnon-enterprise-runners
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK ${{ inputs.java-version }}

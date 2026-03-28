@@ -22,7 +22,7 @@ on:
 jobs:
   build-documentation:
     if: github.repository == 'apache/flink-kubernetes-operator'
-    runs-on: ubuntu-latest
+    runs-on: magnon-enterprise-runners
     env:
       HUGO_REPO: https://github.com/gohugoio/hugo/releases/download/v0.104.0/hugo_extended_0.104.0_Linux-64bit.tar.gz
       HUGO_ARTIFACT: hugo_extended_0.104.0_Linux-64bit.tar.gz
