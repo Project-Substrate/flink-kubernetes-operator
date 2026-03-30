@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: flink-kubernetes-operator
+  namespace: flink-operator
+  labels:
+    app: flink-kubernetes-operator
+    magnon.io/project: substrate
+spec:
+  podSelector:
+    matchLabels:
+      app: flink-kubernetes-operator
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow Prometheus scraping on metrics port
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+      ports:
+        - port: 8080
+          protocol: TCP
+    # Allow health checks
+    - ports:
+        - port: 8085
+          protocol: TCP
+  egress:
+    # Allow kube-apiserver access
+    - ports:
+        - port: 443
+          protocol: TCP
+        - port: 6443
+          protocol: TCP
+    # Allow Kafka for Flink jobs
+    - ports:
+        - port: 9092
+          protocol: TCP
+        - port: 9093
+          protocol: TCP
+    # Allow DNS
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP

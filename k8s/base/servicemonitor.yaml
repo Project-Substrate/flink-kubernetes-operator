@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: flink-kubernetes-operator
+  namespace: flink-operator
+  labels:
+    app: flink-kubernetes-operator
+    release: kube-prometheus-stack
+    app.kubernetes.io/part-of: magnon-platform
+    magnon.io/project: substrate
+spec:
+  selector:
+    matchLabels:
+      app: flink-kubernetes-operator
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          targetLabel: pod
+        - sourceLabels: [__meta_kubernetes_namespace]
+          targetLabel: namespace
+        - targetLabel: project
+          replacement: substrate
+        - targetLabel: operator
+          replacement: flink-kubernetes-operator
+  namespaceSelector:
+    matchNames:
+      - flink-operator

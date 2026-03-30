@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Helsinki (hel1) cluster overlay — secondary production cluster (Hetzner Helsinki).
+# flink-kubernetes-operator manages FlinkDeployment/FlinkSessionJob CRDs.
+#
+# Managed by: Project-Substrate/magnon-argocd/applicationsets/substrate-operators.yaml
+# Cluster: hel1 (external API server — see magnon-argocd/clusters/hel1-cluster-secret.yaml)
+namespace: flink-operator
+
+bases:
+  - ../production
+
+commonLabels:
+  magnon.io/cluster: hel1
+  magnon.io/region: eu-central
+  magnon.io/project: substrate

@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: default-deny
+  namespace: flink-operator
+  labels:
+    app.kubernetes.io/part-of: magnon-platform
+    magnon.io/project: substrate
+spec:
+  endpointSelector: {}
+  ingress: []
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: kube-dns
+    toPorts:
+    - ports:
+      - port: "53"
+        protocol: UDP

@@ -41,3 +41,6 @@ buildNumber.properties
 
 # VSCode settings
 .vscode/
+__pycache__/
+*.pyc
+*.pyo

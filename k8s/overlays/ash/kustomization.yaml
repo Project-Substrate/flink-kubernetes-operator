@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Ashburn (ash) cluster overlay — primary production cluster (Hetzner Falkenstein).
+# flink-kubernetes-operator manages FlinkDeployment/FlinkSessionJob CRDs.
+#
+# Managed by: Project-Substrate/magnon-argocd/applicationsets/substrate-operators.yaml
+# Cluster: ash (kubernetes.default.svc — ArgoCD runs here)
+namespace: flink-operator
+
+bases:
+  - ../production
+
+commonLabels:
+  magnon.io/cluster: ash
+  magnon.io/region: us-east
+  magnon.io/project: substrate

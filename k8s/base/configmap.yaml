@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flink-operator-config
+  namespace: flink-operator
+  labels:
+    app: flink-kubernetes-operator
+    app.kubernetes.io/part-of: magnon-platform
+    magnon.io/project: substrate
+data:
+  flink-conf.yaml: |
+    kubernetes.operator.metrics.reporter.slf4j.factory.class: org.apache.flink.metrics.slf4j.Slf4jReporterFactory
+    kubernetes.operator.metrics.reporter.prometheus.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporter
+    kubernetes.operator.metrics.reporter.prometheus.port: 8080
+    kubernetes.operator.reconcile.interval: 15s
+    kubernetes.operator.observer.progress-check.interval: 5s
+    kubernetes.operator.flink.client.cancel.timeout: 1min
+    kubernetes.operator.resource.cleanup.timeout: 60s
+    kubernetes.operator.deployment.rollback.enabled: true
+    kubernetes.operator.job.upgrade.last-state.checkpoint.max-age: 24h
