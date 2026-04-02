@@ -24,7 +24,6 @@ target "bake-platform" {
   dockerfile = "Dockerfile"
   platforms = [
     "linux/amd64",
-    "linux/arm64/v8",
   ]
   args = {
     SKIP_OS_UPDATE = false
