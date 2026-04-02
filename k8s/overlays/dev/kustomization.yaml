@@ -3,7 +3,7 @@ kind: Kustomization
 
 namespace: flink-operator
 
-bases:
+resources:
   - ../../base
 
 commonLabels:

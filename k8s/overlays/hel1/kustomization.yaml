@@ -8,7 +8,7 @@ kind: Kustomization
 # Cluster: hel1 (external API server — see magnon-argocd/clusters/hel1-cluster-secret.yaml)
 namespace: flink-operator
 
-bases:
+resources:
   - ../production
 
 commonLabels:

@@ -8,7 +8,7 @@ kind: Kustomization
 # Cluster: ash (kubernetes.default.svc — ArgoCD runs here)
 namespace: flink-operator
 
-bases:
+resources:
   - ../production
 
 commonLabels:

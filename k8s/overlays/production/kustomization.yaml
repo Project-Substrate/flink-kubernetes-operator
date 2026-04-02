@@ -3,7 +3,7 @@ kind: Kustomization
 
 namespace: flink-operator
 
-bases:
+resources:
   - ../../base
 
 commonLabels:
@@ -35,4 +35,4 @@ patches:
 
 images:
   - name: ghcr.io/project-substrate/flink-kubernetes-operator
-    newTag: latest
+    newTag: "1.0.0"
