@@ -35,4 +35,4 @@ patches:
 
 images:
   - name: ghcr.io/project-substrate/flink-kubernetes-operator
-    newTag: "1.0.0"
+    newTag: "latest"

@@ -31,7 +31,7 @@ on:
       - 'release-*'
 jobs:
   build_image:
-    runs-on: magnon-enterprise-runners
+    runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
