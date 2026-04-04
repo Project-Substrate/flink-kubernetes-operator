@@ -1,4 +1,4 @@
-import radius as radius 'br:ghcr.io/radius-project/bicep-types-radius/index:latest'
+import radius as radius 'br:ghcr.io/radius-project/bicep-types-radius/index.json:latest'
 
 @description('Environment (dev | staging | production)')
 param environment string
