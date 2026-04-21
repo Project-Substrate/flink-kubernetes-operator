@@ -1,0 +1,21 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-provisioning-dashboards
+  namespace: flink-operator
+  labels:
+    grafana_provisioning: "1"
+data:
+  dashboards.yaml: |
+    apiVersion: 1
+    providers:
+      - name: flink-operator-dashboards
+        orgId: 1
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 30
+        allowUiUpdates: false
+        options:
+          path: /var/lib/grafana/dashboards/flink-operator
+          foldersFromFilesStructure: false

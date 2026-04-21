@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
 ################################################################################
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -111,4 +112,3 @@ validate_olm_bundle() {
 
 generate_olm_bundle
 validate_olm_bundle
-

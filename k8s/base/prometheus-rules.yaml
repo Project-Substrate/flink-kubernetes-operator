@@ -1,0 +1,45 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: flink-kubernetes-operator-alerts
+  namespace: flink-operator
+  labels:
+    app.kubernetes.io/name: flink-kubernetes-operator
+    release: prometheus
+spec:
+  groups:
+  - name: flink-kubernetes-operator.rules
+    rules:
+    - alert: FlinkKubernetesOperatorHighErrorRate
+      expr: 'rate(http_requests_total{service="flink-kubernetes-operator",status=~"5.."}[5m])
+
+        / rate(http_requests_total{service="flink-kubernetes-operator"}[5m]) > 0.05'
+      for: 5m
+      labels:
+        severity: warning
+        service: flink-kubernetes-operator
+      annotations:
+        summary: High error rate on flink-kubernetes-operator
+        description: Error rate > 5% for 5 minutes
+        runbook: https://github.com/magnon/runbooks/blob/main/flink-kubernetes-operator.md
+    - alert: FlinkKubernetesOperatorHighLatency
+      expr: "histogram_quantile(0.99,\n  rate(http_request_duration_seconds_bucket{service=\"\
+        flink-kubernetes-operator\"}[5m])\n) > 2"
+      for: 5m
+      labels:
+        severity: warning
+        service: flink-kubernetes-operator
+      annotations:
+        summary: High p99 latency on flink-kubernetes-operator
+        description: p99 latency > 2s for 5 minutes
+    - alert: FlinkKubernetesOperatorPodCrashLooping
+      expr: "rate(kube_pod_container_status_restarts_total{\n  namespace=\"flink-operator\"\
+        ,\n  pod=~\"flink-kubernetes-operator-.*\"\n}[15m]) > 0"
+      for: 5m
+      labels:
+        severity: critical
+        service: flink-kubernetes-operator
+      annotations:
+        summary: flink-kubernetes-operator pod is crash-looping
+        description: Pod restart rate > 0 for 5 minutes

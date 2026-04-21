@@ -18,3 +18,7 @@
 
 FROM flink:1.20.1-java17
 COPY ./target/autoscaling*.jar /opt/flink/usrlib/autoscaling.jar
+
+RUN addgroup --system --gid 65532 nonroot && \
+    adduser --system --uid 65532 --gid 65532 --no-create-home nonroot
+USER nonroot

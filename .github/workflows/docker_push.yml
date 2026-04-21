@@ -17,6 +17,9 @@
 ################################################################################
 
 name: "Build Docker Image"
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
   push:
@@ -29,9 +32,14 @@ on:
     branches:
       - main
       - 'release-*'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build_image:
     runs-on: magnon-enterprise-runners
+    timeout-minutes: 60
     permissions:
       packages: write
       contents: read

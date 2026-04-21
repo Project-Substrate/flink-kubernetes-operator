@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
 ################################################################################
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -174,4 +175,3 @@ wait_for_logs $jm_pod_name "Completed checkpoint [0-9]+ for job" ${TIMEOUT} || e
 kubectl delete flinksnp/$snapshot
 
 echo "Successfully run the FlinkStateSnapshot test"
-

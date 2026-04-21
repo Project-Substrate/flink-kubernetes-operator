@@ -1,3 +1,4 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,9 +10,13 @@ metadata:
     app.kubernetes.io/part-of: magnon-platform
     magnon.io/project: substrate
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: '1'
+    magnon.io/pdb-skipped: single-replica
+    magnon.io/pdb-note: Scale to replicas>=2 before adding PDB
+    magnon.io/topology-skipped: "single-replica"
 spec:
   replicas: 1
+  minReadySeconds: 10
   selector:
     matchLabels:
       app: flink-kubernetes-operator
@@ -21,10 +26,15 @@ spec:
         app: flink-kubernetes-operator
         app.kubernetes.io/name: flink-kubernetes-operator
         app.kubernetes.io/part-of: magnon-platform
+        magnon.io/log-collection: "enabled"
+        magnon.io/log-namespace: "flink-operator"
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
-        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8080'
+        prometheus.io/path: /metrics
+        fluentbit.io/parser: "json"
+        fluentbit.io/exclude: "false"
+        magnon.io/log-format: "json"
     spec:
       serviceAccountName: flink-kubernetes-operator
       securityContext:
@@ -34,66 +44,100 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       imagePullSecrets:
-        - name: ghcr-pull-secret
+      - name: ghcr-pull-secret
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: flink-kubernetes-operator
+      readinessGates:
+        - conditionType: istio.io/ready
       containers:
-        - name: flink-kubernetes-operator
-          image: ghcr.io/project-substrate/flink-kubernetes-operator:latest
-          imagePullPolicy: Always
-          ports:
-            - name: metrics
-              containerPort: 8080
-              protocol: TCP
-            - name: health
-              containerPort: 8085
-              protocol: TCP
-          env:
-            - name: ENVIRONMENT
-              value: "production"
-            - name: OPERATOR_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "ifers-kafka-bootstrap.kafka.svc.cluster.local:9092"
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 8085
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 5
-            failureThreshold: 3
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8085
-            initialDelaySeconds: 30
-            periodSeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 3
-          resources:
-            requests:
-              cpu: "200m"
-              memory: "256Mi"
-            limits:
-              cpu: "1000m"
-              memory: "1Gi"
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: ["ALL"]
-            readOnlyRootFilesystem: true
-          volumeMounts:
-            - name: tmp
-              mountPath: /tmp
-            - name: flink-operator-config
-              mountPath: /opt/flink/conf
-      volumes:
+      - name: flink-kubernetes-operator
+        image: ghcr.io/project-substrate/flink-kubernetes-operator
+        imagePullPolicy: Always
+        ports:
+        - name: metrics
+          containerPort: 8080
+          protocol: TCP
+        - name: health
+          containerPort: 8085
+          protocol: TCP
+        env:
+        - name: ENVIRONMENT
+          value: production
+        - name: OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: ifers-kafka-bootstrap.kafka.svc.cluster.local:9092
+        - name: OTEL_SERVICE_NAME
+          value: flink-kubernetes-operator
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://otel-collector.substrate.svc.cluster.local:4317"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=flink-kubernetes-operator,service.namespace=flink-operator,magnon.project=flink-operator"
+        - name: OTEL_TRACES_EXPORTER
+          value: otlp
+        - name: OTEL_METRICS_EXPORTER
+          value: otlp
+        - name: OTEL_LOGS_EXPORTER
+          value: otlp
+        - name: OTEL_PROPAGATORS
+          value: "tracecontext,baggage,b3"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8085
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8085
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /
+            port: 8085
+          failureThreshold: 30
+          periodSeconds: 10
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 5"]
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
         - name: tmp
-          emptyDir: {}
+          mountPath: /tmp
         - name: flink-operator-config
-          configMap:
-            name: flink-operator-config
+          mountPath: /opt/flink/conf
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: flink-operator-config
+        configMap:
+          name: flink-operator-config
       terminationGracePeriodSeconds: 30
       nodeSelector:
         kubernetes.io/os: linux

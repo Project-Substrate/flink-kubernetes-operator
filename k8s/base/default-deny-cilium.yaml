@@ -1,3 +1,4 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:

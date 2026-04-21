@@ -1,0 +1,30 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-provisioning-datasources
+  namespace: flink-operator
+  labels:
+    grafana_provisioning: "1"
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus-operated.monitoring.svc.cluster.local:9090
+        isDefault: true
+        jsonData:
+          timeInterval: "15s"
+          queryTimeout: "60s"
+          httpMethod: POST
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki.monitoring.svc.cluster.local:3100
+        jsonData:
+          derivedFields:
+            - name: TraceID
+              matcherRegex: '"trace_id":"(\w+)"'
+              url: http://jaeger.monitoring.svc.cluster.local:16686/trace/${__value.raw}

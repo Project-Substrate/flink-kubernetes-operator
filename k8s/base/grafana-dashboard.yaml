@@ -1,0 +1,129 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flink-kubernetes-operator-grafana-dashboard
+  namespace: flink-operator
+  labels:
+    grafana_dashboard: "1"
+    grafana_folder: "flink-operator"
+    app.kubernetes.io/name: flink-kubernetes-operator
+data:
+  flink-kubernetes-operator-dashboard.json: |
+    {
+        "title": "Flink Kubernetes Operator Service Dashboard",
+        "uid": "flink-kubernetes-operator-overview",
+        "tags": [
+            "magnos",
+            "flink-kubernetes-operator"
+        ],
+        "refresh": "30s",
+        "panels": [
+            {
+                "id": 1,
+                "title": "Request Rate",
+                "type": "graph",
+                "gridPos": {
+                    "x": 0,
+                    "y": 0,
+                    "w": 12,
+                    "h": 8
+                },
+                "targets": [
+                    {
+                        "expr": "rate(http_requests_total{service=\"flink-kubernetes-operator\"}[5m])",
+                        "legendFormat": "{{method}} {{status}}"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "title": "Error Rate",
+                "type": "stat",
+                "gridPos": {
+                    "x": 12,
+                    "y": 0,
+                    "w": 12,
+                    "h": 8
+                },
+                "targets": [
+                    {
+                        "expr": "rate(http_requests_total{service=\"flink-kubernetes-operator\",status=~\"5..\"}[5m]) / rate(http_requests_total{service=\"flink-kubernetes-operator\"}[5m])",
+                        "legendFormat": "Error %"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "title": "p50 / p99 Latency",
+                "type": "graph",
+                "gridPos": {
+                    "x": 0,
+                    "y": 8,
+                    "w": 12,
+                    "h": 8
+                },
+                "targets": [
+                    {
+                        "expr": "histogram_quantile(0.5, rate(http_request_duration_seconds_bucket{service=\"flink-kubernetes-operator\"}[5m]))",
+                        "legendFormat": "p50"
+                    },
+                    {
+                        "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{service=\"flink-kubernetes-operator\"}[5m]))",
+                        "legendFormat": "p99"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "title": "Pod Restarts",
+                "type": "stat",
+                "gridPos": {
+                    "x": 12,
+                    "y": 8,
+                    "w": 12,
+                    "h": 8
+                },
+                "targets": [
+                    {
+                        "expr": "rate(kube_pod_container_status_restarts_total{namespace=\"flink-operator\",pod=~\"flink-kubernetes-operator-.*\"}[15m])",
+                        "legendFormat": "Restarts/min"
+                    }
+                ]
+            },
+            {
+                "id": 5,
+                "title": "CPU Usage",
+                "type": "graph",
+                "gridPos": {
+                    "x": 0,
+                    "y": 16,
+                    "w": 12,
+                    "h": 8
+                },
+                "targets": [
+                    {
+                        "expr": "rate(container_cpu_usage_seconds_total{namespace=\"flink-operator\",pod=~\"flink-kubernetes-operator-.*\"}[5m])",
+                        "legendFormat": "CPU cores"
+                    }
+                ]
+            },
+            {
+                "id": 6,
+                "title": "Memory Usage",
+                "type": "graph",
+                "gridPos": {
+                    "x": 12,
+                    "y": 16,
+                    "w": 12,
+                    "h": 8
+                },
+                "targets": [
+                    {
+                        "expr": "container_memory_working_set_bytes{namespace=\"flink-operator\",pod=~\"flink-kubernetes-operator-.*\"}",
+                        "legendFormat": "Memory"
+                    }
+                ]
+            }
+        ]
+    }
