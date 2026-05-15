@@ -29,7 +29,7 @@ on:
 jobs:
   publish-snapshot:
     if: github.repository == 'apache/flink-kubernetes-operator'
-    runs-on: magnon-enterprise-runners
+    runs-on: magnon-enterprise-runners-substrate
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
