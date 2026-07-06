@@ -1,0 +1,32 @@
+# Trivy configuration for MagnonOS
+# https://aquasecurity.github.io/trivy/latest/docs/references/configuration/config-file/
+
+severity:
+  - CRITICAL
+  - HIGH
+
+exit-code: 1
+
+ignore-unfixed: true
+
+# Skip dev/test dependencies
+skip-dirs:
+  - .lake
+  - node_modules
+  - vendor
+  - third_party
+  - tests
+  - test
+
+# Scan types
+scanners:
+  - vuln
+  - secret
+  - misconfig
+
+# Output
+format: table
+
+# Secret scanning
+secret:
+  config: .trivy-secret.yaml

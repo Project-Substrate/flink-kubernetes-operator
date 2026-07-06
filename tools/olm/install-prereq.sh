@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
 ################################################################################
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -93,5 +94,4 @@ kind create cluster
 kubectl cluster-info --context kind-kind
 operator-sdk olm install
 kubectl config set-context --current --namespace=default
-
 

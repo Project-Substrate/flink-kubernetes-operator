@@ -21,6 +21,9 @@
 # https://infra-reports.apache.org/#ghactions
 name: Flink Kubernetes Operator CI
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
@@ -39,6 +42,7 @@ env:
 jobs:
   helm_lint_test:
     runs-on: magnon-enterprise-runners
+    timeout-minutes: 15
 
     name: Helm Lint Test
 
@@ -96,8 +100,10 @@ jobs:
 
   test_ci:
     runs-on: magnon-enterprise-runners
+    timeout-minutes: 15
     name: maven build
     strategy:
+      fail-fast: false
       matrix:
         java-version: [ 17, 21 ]
     steps:
@@ -133,6 +139,7 @@ jobs:
   e2e_smoke_test:
     name: Smoke test
     strategy:
+      fail-fast: false
       matrix:
         http-client: [ "okhttp", "jdk", "jetty", "vertx" ]
         java-version: [ "17", "21" ]
@@ -146,6 +153,7 @@ jobs:
     name: Java runtimes smoke test
     needs: e2e_smoke_test
     strategy:
+      fail-fast: false
       matrix:
         http-client: [ "okhttp" ]
         java-version: [ "17"]
@@ -165,6 +173,7 @@ jobs:
     name: Alternative namespace tests
     needs: e2e_smoke_test
     strategy:
+      fail-fast: false
       matrix:
         flink-version:
           - "v2_1"
@@ -199,6 +208,7 @@ jobs:
   e2e_ci:
     needs: e2e_smoke_test
     strategy:
+      fail-fast: false
       matrix:
         flink-version:
           - "v2_1"

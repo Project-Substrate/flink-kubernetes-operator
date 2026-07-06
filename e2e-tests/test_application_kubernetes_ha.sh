@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
 ################################################################################
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -48,4 +49,3 @@ wait_for_status flinkdep/flink-example-statemachine '.status.jobManagerDeploymen
 wait_for_status flinkdep/flink-example-statemachine '.status.jobStatus.state' RUNNING ${TIMEOUT} || exit 1
 
 echo "Successfully run the Flink Kubernetes application HA test"
-

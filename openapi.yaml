@@ -1,0 +1,89 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+openapi: "3.1.0"
+info:
+  title: flink-kubernetes-operator API
+  description: |
+    API specification for flink-kubernetes-operator in the Magnon platform.
+    Namespace: flink-operator
+    [TODO: Add detailed description]
+  version: "0.1.0"
+  contact:
+    name: Magnon Compute Corporation
+    url: https://magnoncompute.com
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Magnon-Proprietary
+
+servers:
+  - url: https://api.magnoncompute.com/flink-kubernetes-operator
+    description: Production
+  - url: https://api.projectinfera.com/flink-kubernetes-operator
+    description: Staging
+  - url: http://localhost:8080
+    description: Local development
+
+tags:
+  - name: health
+    description: Health and readiness endpoints
+
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      description: Returns 200 if the service is healthy
+      operationId: healthCheck
+      tags:
+        - health
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+        "503":
+          description: Service is unhealthy
+
+  /metrics:
+    get:
+      summary: Prometheus metrics
+      description: Exposes Prometheus-format metrics
+      operationId: getMetrics
+      tags:
+        - health
+      responses:
+        "200":
+          description: Metrics in Prometheus text format
+          content:
+            text/plain:
+              schema:
+                type: string
+
+# TODO: Add service-specific paths discovered from route analysis
+# No routes auto-discovered
+
+
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

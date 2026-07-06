@@ -1,8 +1,15 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
 apiVersion: v1
 kind: Namespace
 metadata:
   name: flink-operator
   labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/warn-version: latest
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/audit-version: latest
     app.kubernetes.io/managed-by: argocd
     magnon.io/project: substrate
     pod-security.kubernetes.io/enforce: restricted

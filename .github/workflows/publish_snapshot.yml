@@ -18,6 +18,9 @@
 
 name: Publish Snapshot
 
+permissions:
+  contents: read
+
 on:
   schedule:
     # At the end of every day
@@ -27,6 +30,7 @@ jobs:
   publish-snapshot:
     if: github.repository == 'apache/flink-kubernetes-operator'
     runs-on: magnon-enterprise-runners
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:

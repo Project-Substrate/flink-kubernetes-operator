@@ -1,4 +1,8 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
 name: E2E test workflow
+
+permissions:
+  contents: read
 
 on:
   workflow_call:
@@ -35,6 +39,7 @@ jobs:
   e2e_test:
     name: ${{ inputs.test }}
     runs-on: magnon-enterprise-runners
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK ${{ inputs.java-version }}
@@ -113,4 +118,3 @@ jobs:
         run: |
           source e2e-tests/utils.sh
           stop_minikube
-

@@ -1,0 +1,39 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+name: Lint API Spec
+
+on:
+  push:
+    paths:
+      - 'openapi.yaml'
+      - 'openapi.json'
+  pull_request:
+    paths:
+      - 'openapi.yaml'
+      - 'openapi.json'
+
+concurrency:
+  group: lint-api-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  spectral:
+    name: Spectral Lint
+    runs-on: magnon-enterprise-runners
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+
+      - name: Setup Node
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # v4
+        with:
+          node-version: "20"
+
+      - name: Install Spectral
+        run: npm install -g @stoplight/spectral-cli
+
+      - name: Lint OpenAPI spec
+        run: spectral lint openapi.yaml --ruleset .spectral.yaml 2>/dev/null || spectral lint openapi.yaml

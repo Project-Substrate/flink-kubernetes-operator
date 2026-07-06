@@ -1,0 +1,23 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: flink-kubernetes-operator-authz
+  namespace: flink-operator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flink-kubernetes-operator
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            namespaces:
+              - "flink-operator"
+              - "infera"
+              - "monitoring"
+              - "istio-system"
+              - "argocd"
+    - to:
+        - operation:
+            paths: ["/health/live", "/metrics", "/ready"]

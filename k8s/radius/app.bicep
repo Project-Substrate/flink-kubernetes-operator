@@ -50,6 +50,14 @@ resource container 'Applications.Core/containers@2023-10-01-preview' = {
       }
       env: {
         ENVIRONMENT: environment
+        OTEL_SERVICE_NAME: { value: 'flink-kubernetes-operator' }
+        OTEL_EXPORTER_OTLP_ENDPOINT: { value: 'http://otel-collector.otel-system.svc.cluster.local:4317' }
+        LOG_FORMAT: { value: 'json' }
+        LOG_LEVEL: { value: 'INFO' }
+        OTEL_TRACES_SAMPLER: { value: 'parentbased_traceidratio' }
+        OTEL_TRACES_SAMPLER_ARG: { value: '0.1' }
+        OTEL_METRICS_EXPORTER: { value: 'otlp' }
+        OTEL_LOGS_EXPORTER: { value: 'otlp' }
         KAFKA_BOOTSTRAP_SERVERS: 'ifers-kafka-bootstrap.kafka.svc.cluster.local:9092'
       }
       readinessProbe: {

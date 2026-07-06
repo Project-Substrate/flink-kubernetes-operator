@@ -19,5 +19,9 @@
 FROM flink:1.16
 
 RUN mkdir /opt/flink/usrlib
+
+RUN addgroup --system --gid 65532 nonroot && \
+    adduser --system --uid 65532 --gid 65532 --no-create-home nonroot
+USER nonroot
 ADD target/flink-beam-example-*.jar /opt/flink/usrlib/beam-runner.jar
 

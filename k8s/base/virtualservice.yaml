@@ -1,0 +1,20 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: flink-kubernetes-operator
+  namespace: flink-operator
+spec:
+  hosts:
+    - flink-kubernetes-operator
+  http:
+    - retries:
+        attempts: 3
+        perTryTimeout: 30s
+        retryOn: gateway-error,connect-failure,retriable-4xx
+      timeout: 90s
+      route:
+        - destination:
+            host: flink-kubernetes-operator
+            port:
+              number: 8080

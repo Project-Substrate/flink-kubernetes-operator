@@ -1,0 +1,22 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+version = 1
+
+[install]
+python312.pkg-path = "python312"
+uv.pkg-path = "uv"
+git.pkg-path = "git"
+jq.pkg-path = "jq"
+
+[vars]
+PYTHON_VERSION = "3.12"
+UV_SYSTEM_PYTHON = "1"
+
+[hook]
+on-activate = """
+  if [ -f pyproject.toml ]; then
+    uv sync --quiet 2>/dev/null || true
+  fi
+"""
+
+[options]
+systems = ["aarch64-darwin", "x86_64-darwin", "aarch64-linux", "x86_64-linux"]

@@ -13202,7 +13202,7 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /health/live
               port: healthcheck
               scheme: HTTP
             initialDelaySeconds: 5

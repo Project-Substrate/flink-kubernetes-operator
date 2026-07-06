@@ -51,3 +51,7 @@ cd e2e-tests && ./run-e2e.sh
 - Do not run integration or e2e tests against a production cluster; they create and delete namespaces.
 - Do not use `mvn -DskipTests` for release builds — all tests must pass before tagging.
 - Do not change the operator's leader-election namespace without updating the Helm chart RBAC rules; the operator will fail to start.
+
+## Stack
+
+Python

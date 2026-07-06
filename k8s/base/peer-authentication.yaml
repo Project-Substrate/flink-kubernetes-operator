@@ -1,0 +1,13 @@
+# Copyright (c) Magnon Compute Corporation. All rights reserved.
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: flink-operator-peer-authn
+  namespace: flink-operator
+  labels:
+    app.kubernetes.io/part-of: magnon
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  mtls:
+    mode: STRICT
