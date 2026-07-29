@@ -38,7 +38,7 @@ concurrency:
 
 jobs:
   build_image:
-    runs-on: magnon-enterprise-runners
+    runs-on: magnon-enterprise-runners-substrate
     timeout-minutes: 60
     permissions:
       packages: write

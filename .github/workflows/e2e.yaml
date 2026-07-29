@@ -38,7 +38,7 @@ on:
 jobs:
   e2e_test:
     name: ${{ inputs.test }}
-    runs-on: magnon-enterprise-runners
+    runs-on: magnon-enterprise-runners-substrate
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4

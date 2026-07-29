@@ -41,7 +41,7 @@ env:
 
 jobs:
   helm_lint_test:
-    runs-on: magnon-enterprise-runners
+    runs-on: magnon-enterprise-runners-substrate
     timeout-minutes: 15
 
     name: Helm Lint Test
@@ -99,7 +99,7 @@ jobs:
         run: ct lint --target-branch $BRANCH --chart-dirs ${{ env.HELM_CHART_DIR }} --check-version-increment=false --validate-maintainers=false
 
   test_ci:
-    runs-on: magnon-enterprise-runners
+    runs-on: magnon-enterprise-runners-substrate
     timeout-minutes: 15
     name: maven build
     strategy:

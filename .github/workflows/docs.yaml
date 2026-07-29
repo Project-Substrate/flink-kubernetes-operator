@@ -25,7 +25,7 @@ on:
 jobs:
   build-documentation:
     if: github.repository == 'apache/flink-kubernetes-operator'
-    runs-on: magnon-enterprise-runners
+    runs-on: magnon-enterprise-runners-substrate
     timeout-minutes: 60
     env:
       HUGO_REPO: https://github.com/gohugoio/hugo/releases/download/v0.104.0/hugo_extended_0.104.0_Linux-64bit.tar.gz
