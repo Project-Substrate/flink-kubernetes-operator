@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>flink-kubernetes-operator API — API Documentation</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body { margin: 0; padding: 0; }
+      .magnon-docs-skip-link {
+        position: absolute;
+        top: -40px;
+        left: 8px;
+        z-index: 2000;
+        padding: 8px 16px;
+        background: #0d6efd;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: top 0.15s ease-out;
+      }
+      .magnon-docs-skip-link:focus { top: 8px; }
+      .magnon-docs-status-banner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 16px;
+        padding: 8px 16px;
+        background: #3f2d00;
+        color: #ffe4a1;
+        font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        border-bottom: 1px solid #5c4300;
+      }
+      .magnon-docs-status-banner a { color: #ffd166; text-decoration: underline; }
+      .magnon-docs-status-banner a:focus-visible { outline: 2px solid #ffd166; outline-offset: 2px; }
+      .magnon-docs-noscript {
+        padding: 24px;
+        font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #0f172a;
+        background: #fff;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .magnon-docs-skip-link { transition: none; }
+        html { scroll-behavior: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#magnon-docs-content" class="magnon-docs-skip-link">Skip to API reference</a>
+    <div class="magnon-docs-status-banner" role="note" aria-label="API documentation status notice">
+      <span>
+        <strong>Scaffold spec, not a contract.</strong> This document is a
+        hand-templated skeleton (health, metrics, a bearer-auth scheme) with
+        an explicit <code>[TODO: Add detailed description]</code> placeholder
+        and no auto-discovered service routes. This is the Kubernetes
+        operator for Apache Flink — its primary interface is Kubernetes CRDs
+        (FlinkDeployment/FlinkSessionJob) reconciled via controllers, not
+        this HTTP surface. This page documents only the HTTP health/metrics
+        endpoints, nothing about reconciliation behavior.
+      </span>
+      <a href="../openapi.yaml">Raw OpenAPI YAML</a>
+    </div>
+    <noscript>
+      <div class="magnon-docs-noscript">
+        This API reference is rendered by Redoc and requires JavaScript. The
+        underlying OpenAPI document is still available as raw YAML at
+        <a href="../openapi.yaml">../openapi.yaml</a>.
+      </div>
+    </noscript>
+    <main id="magnon-docs-content" tabindex="-1">
+      <redoc
+        spec-url="../openapi.yaml"
+        disable-search="false"
+        hide-hostname="false"
+        expand-responses="200"
+        required-props-first="true"
+      ></redoc>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/redoc@2.1.3/bundles/redoc.standalone.js"></script>
+  </body>
+</html>
